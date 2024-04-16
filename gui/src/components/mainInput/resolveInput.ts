@@ -6,6 +6,8 @@ import {
   MessagePart,
   RangeInFile,
 } from "core";
+import { AutocompleteLanguageInfo } from "core/autocomplete/languages";
+import { languageForFilepath } from "core/autocomplete/constructPrompt";
 import { stripImages } from "core/llm/countTokens";
 import { getBasename } from "core/util";
 import { ideRequest } from "../../util/ide";
@@ -27,7 +29,7 @@ interface MentionAttrs {
 
 async function resolveEditorContent(
   editorState: JSONContent,
-  modifiers: InputModifiers,
+  modifiers: InputModifiers
 ): Promise<[ContextItemWithId[], RangeInFile[], MessageContent]> {
   let parts: MessagePart[] = [];
   let contextItemAttrs: MentionAttrs[] = [];
@@ -54,8 +56,12 @@ async function resolveEditorContent(
       contextItemAttrs.push(...ctxItems);
     } else if (p.type === "codeBlock") {
       if (!p.attrs.item.editing) {
-        const text =
-          "```" + p.attrs.item.name + "\n" + p.attrs.item.content + "\n```";
+        const filename = p.attrs.item.name.split(" ")[0];
+        const fileExtension = filename.split(".").slice(-1)[0];
+        console.warn(fileExtension);
+        console.log("Does this even show up in dev tools?");
+        const lang: AutocompleteLanguageInfo = languageForFilepath(filename);
+        const text = `\`\`\`${fileExtension}\n${lang.comment} ${p.attrs.item.name}\n${p.attrs.item.content}\n\`\`\``;
         if (parts[parts.length - 1]?.type === "text") {
           parts[parts.length - 1].text += "\n" + text;
         } else {
@@ -157,7 +163,7 @@ async function resolveEditorContent(
 
 function findLastIndex<T>(
   array: T[],
-  predicate: (value: T, index: number, obj: T[]) => boolean,
+  predicate: (value: T, index: number, obj: T[]) => boolean
 ): number {
   for (let i = array.length - 1; i >= 0; i--) {
     if (predicate(array[i], i, array)) {
