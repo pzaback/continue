@@ -28,6 +28,7 @@ export type ToIdeFromWebviewOrCoreProtocol = {
   subprocess: [{ command: string }, [string, string]];
   saveFile: [{ filepath: string }, void];
   fileExists: [{ filepath: string }, boolean];
+  createDirectory: [{ dirPath: string }, void];
   readFile: [{ filepath: string }, string];
   showDiff: [
     { filepath: string; newContents: string; stepIndex: number },

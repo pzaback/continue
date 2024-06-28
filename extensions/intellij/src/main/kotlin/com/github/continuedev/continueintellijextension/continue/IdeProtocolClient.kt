@@ -549,6 +549,18 @@ class IdeProtocolClient (
                         val file = File(msg["filepath"])
                         respond(file.exists())
                     }
+                    "createDirectory" -> {
+                        val dirPath = (data as Map<String, String>)["dirPath"]
+                            ?: throw Exception("No dirPath provided")
+
+                        val file = File(dirPath)
+                        if (file.exists() && file.isDirectory()) {
+                            respond(true) // Directory already exists
+                        } else {
+                            val success = file.mkdirs() // Create directory (and parents if needed)
+                            respond(success)
+                        }
+                    }
                     "getContinueDir" -> {
                         respond(getContinueGlobalPath())
                     }

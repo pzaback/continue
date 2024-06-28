@@ -167,6 +167,10 @@ export class VsCodeIdeUtils {
     }
   }
 
+  async createDirectory(dirPath: string): Promise<void> {
+    await vscode.workspace.fs.createDirectory(uriFromFilePath(dirPath));
+  }
+
   showVirtualFile(name: string, contents: string) {
     vscode.workspace
       .openTextDocument(

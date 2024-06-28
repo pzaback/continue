@@ -124,6 +124,7 @@ class CoreMessenger(private val project: Project, esbuildPath: String, continueC
         "getContinueDir",
         "writeFile",
         "fileExists",
+        "createDirectory",
         "showVirtualFile",
         "openFile",
         "runCommand",

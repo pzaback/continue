@@ -23,6 +23,21 @@ class FileSystemIde implements IDE {
     return Promise.resolve(fs.existsSync(filepath));
   }
 
+  // In adding createDirectory to IDE protocol elsewhere, I had to implement
+  // this here. This seems reasonable but I'm unsure if this actually ever gets
+  // called in the specific case I'm addressing.
+  async createDirectory(dirPath: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      fs.mkdir(dirPath, { recursive: true }, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
   async getIdeSettings(): Promise<IdeSettings> {
     return {
       remoteConfigServerUrl: undefined,
@@ -51,8 +66,8 @@ class FileSystemIde implements IDE {
         dirent.isDirectory()
           ? FileType.Directory
           : dirent.isSymbolicLink()
-            ? FileType.SymbolicLink
-            : FileType.File,
+          ? FileType.SymbolicLink
+          : FileType.File,
       ]);
     return Promise.resolve(all);
   }

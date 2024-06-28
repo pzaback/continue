@@ -21,6 +21,9 @@ export class MessageIde implements IDE {
   fileExists(filepath: string): Promise<boolean> {
     return this.request("fileExists", { filepath });
   }
+  async createDirectory(dirPath: string): Promise<void> {
+    await this.request("createDirectory", { dirPath });
+  }
   getIdeSettings(): Promise<IdeSettings> {
     return this.request("getIdeSettings", undefined);
   }

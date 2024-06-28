@@ -140,6 +140,10 @@ export class ReverseMessageIde {
       return this.ide.fileExists(data.filepath);
     });
 
+    this.on("createDirectory", (data) => {
+      return this.ide.createDirectory(data.dirPath);
+    });
+
     this.on("showVirtualFile", (data) => {
       return this.ide.showVirtualFile(data.name, data.content);
     });

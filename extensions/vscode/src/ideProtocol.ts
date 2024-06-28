@@ -47,6 +47,10 @@ class VsCodeIde implements IDE {
     );
   }
 
+  async createDirectory(dirPath: string): Promise<void> {
+    await vscode.workspace.fs.createDirectory(uriFromFilePath(dirPath));
+  }
+
   private authToken: string | undefined;
   private askedForAuth = false;
 
