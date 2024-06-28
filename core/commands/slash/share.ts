@@ -83,9 +83,11 @@ const ShareSlashCommand: SlashCommand = {
       outputDir = outputDir.replace(/^./, workspaceDirectory);
     }
 
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
-    }
+
+    // if (!fs.existsSync(outputDir)) {
+    //   fs.mkdirSync(outputDir, { recursive: true });
+    // }
+    await ide.createDirectory(outputDir);
 
     const dtString = asBasicISOString(getOffsetDatetime(now));
     const outPath = path.join(outputDir, `${dtString}_session.md`); //TODO: more flexible naming?
